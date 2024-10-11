@@ -1,0 +1,133 @@
+// Define weights for each criterion
+final double WEIGHT_WEIGHT = 0.3;
+final double HEIGHT_WEIGHT = 0.2;
+final double EXPERIENCE_WEIGHT = 0.1;
+final double COMFORT_WEIGHT = 0.2;
+final double STEEPNESS_WEIGHT = 0.1;
+final double PRICE_WEIGHT = 0.1;
+
+// Normalize the user's input
+double weightNormalized = (userWeight - minWeight) / (maxWeight - minWeight);
+double heightNormalized = (userHeight - minHeight) / (maxHeight - minHeight);
+double experienceNormalized = userExperience / 10.0;
+double comfortNormalized = userComfort / 10.0;
+double steepnessNormalized = userSteepness / 10.0;
+double priceNormalized = (userPrice - minPrice) / (maxPrice - minPrice);
+
+// Calculate the scores for each bike
+List<Bike> bikes = // retrieve bikes from the database
+for (Bike bike : bikes) {
+    double weightScore = 1.0 - Math.abs(bike.getWeight() - userWeight) / (maxWeight - minWeight);
+    double heightScore = 1.0 - Math.abs(bike.getHeight() - userHeight) / (maxHeight - minHeight);
+    double experienceScore = bike.getExperience() >= userExperience ? 1.0 : bike.getExperience() / (userExperience + 1.0);
+    double comfortScore = bike.getComfort() >= userComfort ? 1.0 : bike.getComfort() / (userComfort + 1.0);
+    double steepnessScore = bike.getSteepness() >= userSteepness ? 1.0 : bike.getSteepness() / (userSteepness + 1.0);
+    double priceScore = 1.0 - Math.abs(bike.getPrice() - userPrice) / (maxPrice - minPrice);
+    
+    double score = weightScore * WEIGHT_WEIGHT + heightScore * HEIGHT_WEIGHT
+                   + experienceScore * EXPERIENCE_WEIGHT + comfortScore * COMFORT_WEIGHT
+                   + steepnessScore * STEEPNESS_WEIGHT + priceScore * PRICE_WEIGHT;
+                   
+    bike.setScore(score);
+}
+
+// Sort the bikes by score (descending order)
+Collections.sort(bikes, new Comparator<Bike>() {
+    public int compare(Bike bike1, Bike bike2) {
+        return Double.compare(bike2.getScore(), bike1.getScore());
+    }
+});
+
+// Display the top recommendation(s) to the user
+int numRecommendations = 3; // Change this to display more or fewer recommendations
+for (int i = 0; i < numRecommendations && i < bikes.size(); i++) {
+    Bike bike = bikes.get(i);
+    System.out.println(String.format("Recommendation #%d: %s (Score: %.2f)", i+1, bike.getName(), bike.getScore()));
+}
+
+
+
+
+public double calculateComfortLevel(double weight, int tireTpi, String suspension, String frameType, String wheelSize) {
+    double comfortScore = 0;
+    double weightScore = 0;
+    double tireScore = 0;
+    double suspensionScore = 0;
+    double frameScore = 0;
+    double wheelScore = 0;
+    double gearScore = 0;
+
+    // calculate weight score
+    if (weight <= 15) {
+        weightScore = 1;
+    } else if (weight <= 20) {
+        weightScore = 0.8;
+    } else if (weight <= 25) {
+        weightScore = 0.6;
+    } else if (weight <= 30) {
+        weightScore = 0.4;
+    } else {
+        weightScore = 0.2;
+    }
+
+    // calculate tire score
+    if (tireTpi >= 120) {
+        tireScore = 1;
+    } else if (tireTpi >= 90) {
+        tireScore = 0.8;
+    } else if (tireTpi >= 60) {
+        tireScore = 0.6;
+    } else if (tireTpi >= 30) {
+        tireScore = 0.4;
+    } else {
+        tireScore = 0.2;
+    }
+
+    // calculate suspension score
+    if (suspension.equals("fully")) {
+        suspensionScore = 1;
+    } else if (suspension.equals("hard-tail")) {
+        suspensionScore = 0.6;
+    } else {
+        suspensionScore = 0.2;
+    }
+
+    // calculate frame score
+    if (frameType.equals("carbon fibre")) {
+        frameScore = 1;
+    } else if (frameType.equals("aluminium")) {
+        frameScore = 0.8;
+    } else if (frameType.equals("steel")) {
+        frameScore = 0.6;
+    } else {
+        frameScore = 0.2;
+    }
+
+    // calculate wheel score
+    if (wheelSize.equals("29\"")) {
+        wheelScore = 1;
+    } else if (wheelSize.equals("27.5\"")) {
+        wheelScore = 0.8;
+    } else if (wheelSize.equals("26\"")) {
+        wheelScore = 0.6;
+    } else {
+        wheelScore = 0.2;
+    }
+
+    // calculate gear score
+    gearScore = 1;
+
+    // calculate overall comfort score
+    comfortScore = weightScore * 0.2 + tireScore * 0.2 + suspensionScore * 0.3 + frameScore * 0.1 + wheelScore * 0.1 + gearScore * 0.1;
+
+    // calculate steepness level
+    double steepnessLevel = suspensionScore * 0.5 + wheelScore * 0.5;
+
+    // calculate experience level
+    double experienceLevel = weightScore * 0.4 + tireScore * 0.1 + suspensionScore * 0.1 + frameScore * 0.2 + wheelScore * 0.1 + gearScore * 0.1;
+
+    return comfortScore;
+}
+
+
+
